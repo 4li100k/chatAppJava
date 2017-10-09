@@ -1,7 +1,9 @@
 package sample;
 
-
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import java.io.IOException;
 
@@ -15,12 +17,14 @@ public class Controller {
 
 
     public boolean connected;
-    public static Connection connection = null;
+    public Connection connection = null;
 
     public void initialize(){
         sendButton.setVisible(false);
         connected = false;
-        inputField.setText("172.16.17.151:4545");
+        //inputField.setText("172.16.17.151:4545");
+        inputField.setText("localhost:4444");
+
     }
 
     public void connect() throws IOException{
@@ -47,20 +51,37 @@ public class Controller {
         }
 
 
-        if (connection == null || !connection.isEstablished){
-            connection = new Connection(ip, port);
+        if (connection == null || !connection.isEstablished) {
+            connection = new Connection(ip, port, this);
+            Thread receiver = new Thread(connection);
+            receiver.setDaemon(true);
+            receiver.start();
+            sendButton.setVisible(true);
+            connectButton.setVisible(false);
+            inputField.clear();
+            inputField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent keyEvent) {
+                    if (keyEvent.getCode() == KeyCode.ENTER)  {
+                        try {
+                            sendMessage();
+                        } catch (IOException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
         }
-        sendButton.setVisible(true);
-        connectButton.setVisible(false);
-        inputField.clear();
     }
 
     public void sendMessage() throws IOException {
-        String input = inputField.getText();
-        if(connection.isEstablished && input.length()>0){
-            connection.sendMessage(input);
+        if(connection.isEstablished){
+            String msg = inputField.getText();
+            connection.sendMessage(msg);
         }
     }
+
+
 
 
 
