@@ -15,7 +15,7 @@
         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
             <children>
                 <Button fx:id="sendButton" layoutX="420.0" layoutY="300.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="40.0" prefWidth="60.0" text="send" />
-                <TextArea fx:id="outputField" layoutX="20.0" layoutY="20.0" prefHeight="260.0" prefWidth="460.0" />
+                <TextArea fx:id="outputField" editable="false" layoutX="20.0" layoutY="20.0" prefHeight="260.0" prefWidth="460.0" />
                 <TextField fx:id="inputField" layoutX="20.0" layoutY="300.0" prefHeight="40.0" prefWidth="400.0" />
                 <TableView fx:id="userList" layoutX="500.0" layoutY="20.0" prefHeight="260.0" prefWidth="180.0">
                     <columns>
