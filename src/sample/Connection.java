@@ -10,6 +10,7 @@ public class Connection implements Runnable{
     public PrintStream os = null;
     public boolean isEstablished = false;
     public Controller kawaii = null;
+    public String status = "fresh";
 
 
     public Connection(String ip, int port, Controller kawaii){
@@ -28,23 +29,14 @@ public class Connection implements Runnable{
 
     public void sendMessage(String msg) throws IOException
     {
-        if (msg!= null && msg.length()>0)
-            os.println(msg);
+        if (kawaii != null){
+            if (msg!= null && msg.length()>0)
+                        os.println(msg);
+                        kawaii.outputField.appendText("<me> "+msg+"\n");
+        }
+        else kawaii.outputField.appendText("you are not connected\n");
         kawaii.inputField.clear();
     }
-
-
-    public void stop()
-    {  try
-    {  if (is != null)  is.close();
-        if (os != null)  os.close();
-        if (socket    != null)  socket.close();
-    }
-    catch(IOException ioe)
-    {  System.out.println("Error closing ...");
-    }
-    }
-
 
     @Override
     public void run() {
@@ -59,15 +51,32 @@ public class Connection implements Runnable{
 
             do {
                 line = is.readLine();
-                if (line.length()>0)
-                    //outputField.appendText("Server: Received \"" + line + "\"");
-                    kawaii.outputField.appendText(line+"\n");
-                //try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
-            } while ( !line.trim().equalsIgnoreCase("exit") );
+
+                if (line!=null){
+                    if (line.length()>0)
+                                        //kawaii.outputField.appendText(line+"\n");
+                                        protocol(line);
+                }else {kawaii.outputField.appendText("   >DISCONNECTED<\n");
+                        line = "QUIT";
+                }
+
+
+            } while ( !line.trim().equalsIgnoreCase("QUIT") );
             socket.close();
+            is.close();
+            os.close();
+            System.out.println("disconnected");
+            kawaii.inputField.setVisible(false);
+            kawaii.sendButton.setVisible(false);
+            //kawaii.end();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void protocol(String line) {
+        kawaii.outputField.appendText(line+"\n");
+
     }
 
 }
