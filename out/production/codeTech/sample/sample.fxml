@@ -5,26 +5,26 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 
 <GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
     <children>
-        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
-            <children>
-                <Button fx:id="sendButton" layoutX="420.0" layoutY="300.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="40.0" prefWidth="60.0" text="send" />
-                <TextArea fx:id="outputField" editable="false" layoutX="20.0" layoutY="20.0" prefHeight="260.0" prefWidth="460.0" />
-                <TextField fx:id="inputField" layoutX="20.0" layoutY="300.0" prefHeight="40.0" prefWidth="400.0" />
-                <TableView fx:id="userList" layoutX="500.0" layoutY="20.0" prefHeight="260.0" prefWidth="180.0">
-                    <columns>
-                        <TableColumn fx:id="userListCol" prefWidth="180.0" text="userList" />
-                    </columns>
-                </TableView>
-            <Button fx:id="connectButton" layoutX="535.0" layoutY="300.0" mnemonicParsing="false" onAction="#connect" prefHeight="40.0" prefWidth="97.0" text="connect" />
-            </children>
-        </AnchorPane>
+      <Pane prefHeight="360.0" prefWidth="700.0">
+         <children>
+                      <Button fx:id="sendButton" layoutX="420.0" layoutY="300.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="40.0" prefWidth="60.0" text="send" />
+                      <TextArea fx:id="outputField" editable="false" layoutX="20.0" layoutY="20.0" prefHeight="260.0" prefWidth="460.0" />
+                      <TextField fx:id="inputField" layoutX="20.0" layoutY="300.0" prefHeight="40.0" prefWidth="400.0" />
+                      <TableView fx:id="userList" layoutX="500.0" layoutY="20.0" prefHeight="260.0" prefWidth="180.0">
+                          <columns>
+                              <TableColumn fx:id="userListCol" maxWidth="180.0" minWidth="180.0" prefWidth="180.0" resizable="false" text="online users" />
+                          </columns>
+                      </TableView>
+                  <Button fx:id="connectButton" layoutX="535.0" layoutY="300.0" mnemonicParsing="false" onAction="#connect" prefHeight="40.0" prefWidth="97.0" text="connect" />
+               
+         </children></Pane>
     </children>
    <columnConstraints>
       <ColumnConstraints />

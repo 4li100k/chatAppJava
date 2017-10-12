@@ -24,5 +24,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
+        if (kawaii.connection!=null && kawaii.connection.os!=null)
+        kawaii.connection.os.println("QUIT");
     }
 }
