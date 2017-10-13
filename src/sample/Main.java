@@ -16,8 +16,9 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("sample.fxml"));
         Parent root = loader.load();
         kawaii = loader.getController();
-        primaryStage.setTitle("concealed pula");
+        primaryStage.setTitle("a serious title");
         primaryStage.setScene(new Scene(root));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
