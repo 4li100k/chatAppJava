@@ -121,6 +121,7 @@ public class EchoClientHandler implements Runnable {
         for (EchoClientHandler handler: echoClientHandlers) {
             handler.os.println(output);
         }
+        System.out.println(output);
 
     }
 

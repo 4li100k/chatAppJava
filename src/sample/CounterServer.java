@@ -17,7 +17,7 @@ public class CounterServer implements Runnable{
                 e.printStackTrace();
             }
             counter++;
-        }while(counter < 5);
+        }while(counter < 65);
         handler.setDed(true);
         handler.os.println("QUIT");
     }

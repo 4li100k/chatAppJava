@@ -1,6 +1,7 @@
 package sample;
 
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class EchoServerMultipleClients {
         try {
             echoServer = new ServerSocket(4444);
             System.out.println("Server is up and running... ");
+            System.out.println(Inet4Address.getLocalHost().getHostAddress());
             while (true) {
                 // Create a socket object from the ServerSocket to listen and accept connections.
                 clientSocket = echoServer.accept();

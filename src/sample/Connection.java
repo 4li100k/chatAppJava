@@ -36,11 +36,23 @@ public class Connection implements Runnable{
 
     public void sendMessage(String msg) throws IOException
     {
+        //JOIN rene, 172.16.31.127:4444
         if (kawaii != null){
             if (msg!= null && msg.length()>0){
-                os.println(msg);
-                kawaii.outputField.appendText("<me> "+msg+"\n");
-                if (msg.equals("QUIT")) isDed = true;
+                switch (status) {
+                    case "fresh": {
+                        os.println(msg);
+                        kawaii.outputField.appendText("<me> " + msg + "\n");
+                        if (msg.equals("QUIT")) isDed = true;
+                        break;
+                    }
+                    case "connected": {
+                        os.println("DATA " + username + ": " + msg);
+                        kawaii.outputField.appendText("<"+username+"> " + msg + "\n");
+                        if (msg.equals("QUIT")) isDed = true;
+                        break;
+                    }
+                }
             }
         }
         else kawaii.outputField.appendText("you are not connected\n");
