@@ -71,7 +71,7 @@ public class EchoClientHandler implements Runnable {
                                             }
                                         }
                                         username = inputAr[1].substring(0, inputAr[1].length() - 1);
-                                        if (clientSocket.getLocalPort() == port && Inet4Address.getLocalHost().getHostAddress().equals(ip)) {
+                                        if (clientSocket.getLocalPort() == port && (Inet4Address.getLocalHost().getHostAddress().equals(ip) || ip.equals("localhost"))) {
                                             if (!userlist.contains(username)) {
                                                 if (username.equals(username.replaceAll("[^a-zA-Z_0-9-]","")) && username.length()<13 ){
                                                     userlist.add(username);
@@ -102,7 +102,7 @@ public class EchoClientHandler implements Runnable {
                         }
                     }
                 }
-            } while ( !input.trim().equals("QUIT") && !isDed);
+            } while ( !input.trim().equals("QUIT") && !isDed && !clientSocket.isClosed());
             if (connected){userlist.remove(userlist.indexOf(username));}
             updateList();
             counter.end();
@@ -129,15 +129,17 @@ public class EchoClientHandler implements Runnable {
         String[] lineAr = line.split(" ");
         switch (lineAr[0]){
             case "DATA":{
-                String source = lineAr[1].substring(0, lineAr[1].length() - 1);
-                if (source.equals(username)){
-                    for (EchoClientHandler handler: echoClientHandlers) {
-                        if (handler != this)
-                            handler.os.println(line);
+                if (lineAr.length>2 && lineAr[1].length()>0 && lineAr[2].length()>0) {
+                    String source = lineAr[1].replaceAll(":","");
+                    if (source.equals(username)){
+                        for (EchoClientHandler handler: echoClientHandlers) {
+                            if (handler != this && handler.status.equals("broadcast"))
+                                handler.os.println(line);
+                        }
+                    } else {
+                        os.println("J_ER 1024: wrong sourcename");
                     }
-                } else {
-                    os.println("J_ER 1024: wrong sourcename");
-                }
+                } else {os.println("J_ER 944948: send actually something pls");}
 
                 break;
             }

@@ -14,7 +14,7 @@ public class CounterClient implements Runnable{
     public void run() {
         do {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(60000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

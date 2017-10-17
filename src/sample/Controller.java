@@ -31,7 +31,7 @@ public class Controller {
     public void initialize(){
         try {
             sendButton.setVisible(false);
-            inputField.setText("JOIN username, " + Inet4Address.getLocalHost().getHostAddress() + ":4444");
+            inputField.setText("JOIN Bilbo, " + Inet4Address.getLocalHost().getHostAddress() + ":4444");
             userListCol.setCellValueFactory(new PropertyValueFactory<Name, String>("name"));
             userList.getColumns().clear();
             userList.getColumns().addAll(userListCol);
@@ -104,7 +104,11 @@ public class Controller {
     public void sendMessage() throws IOException {
         if(connection.isEstablished()){
             String msg = inputField.getText();
-            connection.sendMessage(msg);
+            if (!msg.equals("special")) {
+                connection.sendMessage(msg);
+            } else {
+                connection.sendMessage(msg);
+            }
         }
     }
 

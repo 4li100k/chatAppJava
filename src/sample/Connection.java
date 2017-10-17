@@ -19,6 +19,7 @@ public class Connection implements Runnable{
     private String username;
     private boolean isDed = false;
     private CounterClient counter;
+    private String tryout;
 
 
     public Connection(String ip, int port, String username, Controller kawaii){
@@ -36,13 +37,17 @@ public class Connection implements Runnable{
 
     public void sendMessage(String msg) throws IOException
     {
+        String[] lineAr = msg.split(" ");
         //JOIN rene, 172.16.31.127:4444
         if (kawaii != null){
             if (msg!= null && msg.length()>0){
                 switch (status) {
                     case "fresh": {
+                        if (lineAr.length>2 && lineAr[0].equals("JOIN") && lineAr[1].length()>0){
+                            username = lineAr[1].replaceAll(",","");
+                        }
                         os.println(msg);
-                        kawaii.outputField.appendText("<me> " + msg + "\n");
+                        kawaii.outputField.appendText("<"+username+"> " + msg + "\n");
                         if (msg.equals("QUIT")) isDed = true;
                         break;
                     }
@@ -75,17 +80,14 @@ public class Connection implements Runnable{
             counterThread.setDaemon(true);
             counterThread.start();
 
-            do {
+            while ( !line.trim().equalsIgnoreCase("QUIT") && !isDed && !socket.isClosed()) {
                 line = is.readLine();
 
                 if (line!=null && line.length()>0 && !line.equals("QUIT")){
                     protocol(line);
-                }else {kawaii.outputField.appendText("   >disconnected or timed out<\n");
-                        os.println("QUIT");
-                        break;
                 }
 
-            } while ( !line.trim().equalsIgnoreCase("QUIT") || !isDed);
+            }
             disconnect();
         } catch (IOException e) {
             e.printStackTrace();
@@ -123,15 +125,18 @@ public class Connection implements Runnable{
                 break;
             }
             case "DATA":{
-                String source = lineAr[1].substring(0, lineAr[1].length() - 1);
+                String source = lineAr[1].replaceAll(":","");
                 String message = "";
                 for (int i = 2 ; i < lineAr.length ; i++) message = message + " " + lineAr[i];
-                kawaii.outputField.appendText("<" + source + "> " + message + "\n");
+                if (!source.equals(username)) {
+                    kawaii.outputField.appendText("<" + source + "> " + message + "\n");
+                } else {
+                    System.out.println("you received your own message: " + message);
+                }
                 break;
             }
             default:{
-                kawaii.outputField.appendText("timed out\n");
-                isDed = true;
+                kawaii.outputField.appendText("      you received an unrecognised command\n              " + line + "\n");
                 break;
             }
         }
@@ -155,7 +160,10 @@ public class Connection implements Runnable{
 
     public void disconnect(){
         System.out.println("disconnected");
+        isDed = true;
         try {
+            kawaii.outputField.appendText("   >disconnected or timed out<\n");
+            os.println("QUIT");
             socket.close();
             is.close();
             os.close();
